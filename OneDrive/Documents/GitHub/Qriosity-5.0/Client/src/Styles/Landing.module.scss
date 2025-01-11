@@ -1,0 +1,79 @@
+$button-bg-color: #570f92;
+$button-text-color: #ffffff;
+$button-padding: 3px 15px;
+$button-border-radius: 35px;
+
+.main {
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  position: relative;
+
+  .videoBackground {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+}
+
+
+  .body, .mask {
+    height: 80vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #f5f4f4;
+    font-size: 24px;
+    line-height: 25x;
+    cursor: default;
+
+    span {
+      color: #f472b6;
+      text-shadow: 4px 4px 4px #4c2ed4e8;
+
+    }
+    p{
+        font-weight: 500;
+    }
+
+    .buttons {
+      display: inline-block;
+      padding: $button-padding;
+      background-color: $button-bg-color;
+      color: $button-text-color;
+      border: none;
+      border-radius: $button-border-radius;
+      text-align: center;
+      text-decoration: none;
+      font-size: 32px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      line-height: 66px;
+      position: relative;
+
+      &:hover {
+        background-color: darken($button-bg-color, 10%);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  .mask{
+    position: absolute;
+    mask-image: url("../assets/mask.svg");
+    background-color: #0c0c0c;
+    mask-repeat: no-repeat;
+    mask-position: 0%;
+    mask-size: 100px;
+
+  }
+}
