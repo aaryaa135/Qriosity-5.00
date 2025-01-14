@@ -9,6 +9,7 @@ import Portal from './pages/Portal';
 import Profile from './pages/Profile';
 import Rules from "./pages/Rules";
 import SignUp from './pages/Signup';
+import CongratulationsPage from './pages/CongratulationPage';
 
 const App = () => {
   
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path='/rules' element={<Rules/>} />
             <Route path='/aboutus' element={<AboutUs/>} />
+            <Route path='/congratulations' element={<CongratulationsPage/>} />
           </Routes>
         </Router>
     </>

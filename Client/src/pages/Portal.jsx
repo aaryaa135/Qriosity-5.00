@@ -6,6 +6,7 @@ import "../Styles/Home.css";
 import "../Styles/portal.css";
 import Countdown from "../common/components/Countdown";
 import Navbar from "../common/components/Navbar";
+import { useNavigate } from "react-router-dom";
 import {
   useQuestionsQuery,
   useSubmitAnswerMutation,
@@ -19,6 +20,8 @@ const Portal = () => {
   const user = useSelector(selectCurrentUser);
   // console.log(user);
   const targetDate = new Date("2024-02-17T15:30:00Z");
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -148,16 +151,13 @@ const Portal = () => {
       const username = user.name;
       const questionNumber = user.currentQuestion + 1;
       const answer = userAnswer;
-      // console.log(username, questionNumber, answer);
-
+  
       const response = await submit({
         questionNumber,
         answer,
         username,
       }).unwrap();
-
-      // console.log(response);
-
+  
       if (response.correct == true) {
         dispatch(
           updateUserCurrentQuestion({
@@ -174,7 +174,12 @@ const Portal = () => {
           progress: undefined,
           theme: "colored",
         });
-      } else if (response.correct == false) {
+  
+        // Navigate to congratulations page when all questions are completed
+        if (response.newQuestionNumber >= 25) {
+          navigate("/congratulations");
+        }
+      } else {
         toast.error(getRandomMessage(), {
           position: "top-right",
           autoClose: 3000,
@@ -190,6 +195,7 @@ const Portal = () => {
       console.error(error);
     }
   };
+  
   // const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -259,50 +265,58 @@ const Portal = () => {
                         id="questionStatement"
                         className="text-sm md:text-2xl lg:text-3xl xl:text-3xl font-bold h-auto"
                       >
-                        {user.currentQuestion < 25
+                        {user.currentQuestion < 10
                           ? `${
-                              questionsData.questions[user.currentQuestion]
-                                .questionStatement
+                              questionsData.questions[user.currentQuestion].questionStatement
                             }`
                           : `Congratulations! You have successfully completed Qriosity 4.0.`}
                       </p>
-                    </div>
-                    <motion.div
-                      layout
-                      className="flex text-lg text-center justify-center mb-4 p-1 w-fit mx-auto"
-                    >
-                      <input
-                        type="text"
-                        id="userAnswer"
-                        onChange={(e) => setUserAnswer(e.target.value)}
-                        placeholder="Enter your answer"
-                        className="placeholder:text-center p-2 mt-4 mx-auto text-black text-md rounded-lg focus:outline-none w-2/3 md:w-2/3 lg:w-1/2 xl:w-auto 2xl:w-auto"
-                        autoComplete="off"
-                      />
-                    </motion.div>
-                  </div>
+                      {user.currentQuestion < 10 ? (
+                        <>
+                          <motion.button
+                            id="hintButton"
+                            onClick={displayHint}
+                            whileHover={{
+                              scale: 1.1,
+                              boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                            }}
+                            className="bg-blue-500 text-white px-4 py-2 mr-2 rounded-md w-20 hover:bg-blue-700 w-auto text-sm md:text-md lg:text-xl xl:text-xl"
+                          >
+                            <p className="text-[10px] text-bold md:text-xl flex justify-center items-center">
+                              Hint
+                            </p>
+                          </motion.button>
 
-                  <div className="flex items-center justify-center p-2 mb-4 mx-auto">
-                    <motion.button
-                      id="hintButton"
-                      onClick={displayHint}
-                      whileHover={{
-                        scale: 1.1,
-                        boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-                      }}
-                      className="bg-blue-500 text-white px-4 py-2 mr-2 rounded-md w-20 hover:bg-blue-700 w-auto text-sm md:text-md lg:text-xl xl:text-xl">
-                      <p className=" text-[10px] text-bold md:text-xl flex justify-center item-center">Hint</p> 
-                    </motion.button>
-                    <motion.button
-                      id="submitButton"
-                      onClick={checkAnswer}
-                      whileHover={{
-                        scale: 1.1,
-                        boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-                      }}
-                      className="bg-green-500 text-white px-4 py-2 mr-2 rounded-md w-20 hover:bg-green-700 w-auto text-sm md:text-md lg:text-xl xl:text-xl">
-                      <p className="text-[10px] text-bold md:text-xl flex justify-center item-center">Submit</p>
-                    </motion.button>
+                          <motion.button
+                            id="submitButton"
+                            onClick={checkAnswer}
+                            whileHover={{
+                              scale: 1.1,
+                              boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                            }}
+                            className="bg-green-500 text-white px-4 py-2 mr-2 rounded-md w-20 hover:bg-green-700 w-auto text-sm md:text-md lg:text-xl xl:text-xl"
+                          >
+                            <p className="text-[10px] text-bold md:text-xl flex justify-center items-center">
+                              Submit
+                            </p>
+                          </motion.button>
+                        </>
+                      ) : (
+                        <motion.button
+                          id="congratulationsButton"
+                          onClick={() => navigate("/congratulations")}
+                          whileHover={{
+                            scale: 1.1,
+                            boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                          }}
+                          className="bg-purple-500 text-white px-4 py-2 mr-2 rounded-md w-20 hover:bg-purple-700 w-auto text-sm md:text-md lg:text-xl xl:text-xl"
+                        >
+                          <p className="text-[10px] text-bold md:text-xl flex justify-center items-center">
+                             End!
+                          </p>
+                        </motion.button>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}

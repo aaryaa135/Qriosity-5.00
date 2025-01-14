@@ -4,6 +4,7 @@ import Portal from "../pages/Portal";
 import Profile from "../pages/Profile";
 import AboutUs from "../pages/AboutUs";
 import Rules from "../pages/Rules";
+import CongratulationsPage from "../pages/CongratulationPage";
 // import PrivateRoute from "./PrivateRoute";
 
 function Router() {
@@ -15,6 +16,7 @@ function Router() {
                     <Route path='/profile' element={<Profile/>} />
                     <Route path='/rules' element={<Rules/>} />
                     <Route path='/aboutus' element={<AboutUs/>} />
+                    <Route path='/congratulations' element={<CongratulationsPage/>} />
                 </Routes>
         </BrowserRouter>
     );
